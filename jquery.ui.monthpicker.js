@@ -461,6 +461,33 @@
 					[inst.selectedYear + 1, inst]);
 		},
 		
+		/* Detach a datepicker from its control.
+		 * @param  target	element - the target input field or division or span
+		 */
+		_destroyMonthpicker: function(target) {
+			var nodeName,
+				$target = $(target),
+				inst = $.data(target, PROP_NAME);
+	
+			if (!$target.hasClass(this.markerClassName)) {
+				return;
+			}
+	
+			nodeName = target.nodeName.toLowerCase();
+			$.removeData(target, PROP_NAME);
+			if (nodeName === "input") {
+				inst.append.remove();
+				inst.trigger.remove();
+				$target.removeClass(this.markerClassName).
+					unbind("focus", this._showMonthpicker).
+					unbind("keydown", this._doKeyDown).
+					unbind("keypress", this._doKeyPress).
+					unbind("keyup", this._doKeyUp);
+			} else if (nodeName === "div" || nodeName === "span") {
+				$target.removeClass(this.markerClassName).empty();
+			}
+		},
+		
 		/* Enable the date picker to a jQuery selection.
 		   @param  target    element - the target input field or division or span */
 		_enableMonthpicker: function(target) {
