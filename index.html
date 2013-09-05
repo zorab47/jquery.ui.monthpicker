@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>jquery.ui.monthpicker by zorab47</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>jquery.ui.monthpicker</h1>
+        <p>Monthpicker, the missing JQuery UI widget.</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/zorab47/jquery.ui.monthpicker" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/zorab47/jquery.ui.monthpicker/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/zorab47/jquery.ui.monthpicker/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>
+<a name="a-month-picker-for-jquery-ui" class="anchor" href="#a-month-picker-for-jquery-ui"><span class="octicon octicon-link"></span></a>A Month Picker for <a href="http://jqueryui.com/">jQuery UI</a>
+</h1>
+
+<h2>
+<a name="why-use-it" class="anchor" href="#why-use-it"><span class="octicon octicon-link"></span></a>Why use it?</h2>
+
+<p>You may be already using <a href="http://jqueryui.com/demos/datepicker/">JQuery UI Datepicker</a> and are now looking for a Monthpicker. Unfortunately, this is not part of the functionalities of JQuery UI Datepicker.
+After some Googling, you will realize two things: you are not alone having a need for a Monthpicker, and most solutions only are relying on dirty hacks on the original JQuery UI Datepicker widget.</p>
+
+<p>Be relieved, you have now found dedicated working and customizable Monthpicker implementation. In the background, it is largely based on JQuery UI Datepicker, which is why it is working so great and looking so nice!
+You will notice that the design is very similar to JQuery UI Datepicker, as it uses the same CSS. Hence it is fully compatible with your usual JQuery UI theme!</p>
+
+<h2>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h2>
+
+<p><a href="http://jsfiddle.net/HXwBv/1/">Here!</a></p>
+
+<h2>
+<a name="available-settings-and-their-defaults" class="anchor" href="#available-settings-and-their-defaults"><span class="octicon octicon-link"></span></a>Available settings and their defaults</h2>
+
+<p>General settings:</p>
+
+<div class="highlight"><pre><span class="nx">showOn</span><span class="o">:</span> <span class="s1">'focus'</span><span class="p">,</span> <span class="c1">// 'focus' for popup on focus,</span>
+<span class="c1">// 'button' for trigger button, or 'both' for either</span>
+<span class="nx">showAnim</span><span class="o">:</span> <span class="s1">'fadeIn'</span><span class="p">,</span> <span class="c1">// Name of jQuery animation for popup</span>
+<span class="nx">buttonText</span><span class="o">:</span> <span class="s1">'...'</span><span class="p">,</span> <span class="c1">// Text for trigger button</span>
+<span class="nx">buttonImage</span><span class="o">:</span> <span class="s1">''</span><span class="p">,</span> <span class="c1">// URL for trigger button image</span>
+<span class="nx">changeYear</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// True if year can be selected directly, false if only prev/next</span>
+<span class="nx">yearRange</span><span class="o">:</span> <span class="s1">'c-10:c+10'</span><span class="p">,</span> <span class="c1">// Range of years to display in drop-down,</span>
+<span class="c1">// either relative to today's year (-nn:+nn), relative to currently displayed year</span>
+<span class="c1">// (c-nn:c+nn), absolute (nnnn:nnnn), or a combination of the above (nnnn:-n)</span>
+<span class="nx">beforeShow</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">// Function that takes an input field and</span>
+<span class="c1">// returns a set of custom settings for the date picker</span>
+<span class="nx">onSelect</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">// Define a callback function when a date is selected</span>
+<span class="nx">onChangeYear</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">// Define a callback function when the year is changed</span>
+<span class="nx">onClose</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">// Define a callback function when the monthpicker is closed</span>
+<span class="nx">stepYears</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// Number of months to step back/forward</span>
+<span class="nx">altField</span><span class="o">:</span> <span class="s1">''</span><span class="p">,</span> <span class="c1">// Selector for an alternate field to store selected dates into</span>
+<span class="nx">altFormat</span><span class="o">:</span> <span class="s1">''</span><span class="p">,</span> <span class="c1">// The date format to use for the alternate field</span>
+<span class="nx">disabled</span><span class="o">:</span> <span class="kc">false</span> <span class="c1">// The initial disabled state</span>
+</pre></div>
+
+<p>L10N:</p>
+
+<div class="highlight"><pre><span class="nx">dateFormat</span><span class="o">:</span> <span class="s1">'mm/yy'</span><span class="p">,</span>
+<span class="nx">yearSuffix</span><span class="o">:</span> <span class="s1">''</span> <span class="c1">// Additional text to append to the year in the month headers</span>
+<span class="nx">prevText</span><span class="o">:</span> <span class="s1">'Prev'</span><span class="p">,</span> <span class="c1">// Display text for previous month link</span>
+<span class="nx">nextText</span><span class="o">:</span> <span class="s1">'Next'</span><span class="p">,</span> <span class="c1">// Display text for next month link</span>
+<span class="nx">monthNames</span><span class="o">:</span> <span class="p">[</span><span class="s1">'January'</span><span class="p">,</span><span class="s1">'February'</span><span class="p">,</span><span class="s1">'March'</span><span class="p">,</span><span class="s1">'April'</span><span class="p">,</span><span class="s1">'May'</span><span class="p">,</span><span class="s1">'June'</span><span class="p">,</span>
+<span class="s1">'July'</span><span class="p">,</span><span class="s1">'August'</span><span class="p">,</span><span class="s1">'September'</span><span class="p">,</span><span class="s1">'October'</span><span class="p">,</span>
+<span class="s1">'November'</span><span class="p">,</span><span class="s1">'December'</span><span class="p">],</span> <span class="c1">// Names of months for drop-down and formatting</span>
+<span class="nx">monthNamesShort</span><span class="o">:</span> <span class="p">[</span><span class="s1">'Jan'</span><span class="p">,</span> <span class="s1">'Feb'</span><span class="p">,</span> <span class="s1">'Mar'</span><span class="p">,</span> <span class="s1">'Apr'</span><span class="p">,</span> <span class="s1">'May'</span><span class="p">,</span> <span class="s1">'Jun'</span><span class="p">,</span> <span class="s1">'Jul'</span><span class="p">,</span>
+<span class="s1">'Aug'</span><span class="p">,</span> <span class="s1">'Sep'</span><span class="p">,</span> <span class="s1">'Oct'</span><span class="p">,</span> <span class="s1">'Nov'</span><span class="p">,</span> <span class="s1">'Dec'</span><span class="p">],</span> <span class="c1">// For formatting&lt;/pre&gt;</span>
+</pre></div>
+
+<p>Date Formatting:</p>
+
+<pre><code>The format can be combinations of the following:
+m  - month of year (no leading zero)
+mm - month of year (two digit)
+M  - month name short
+MM - month name long
+y  - year (two digit)
+yy - year (four digit)
+@ - Unix timestamp (ms since 01/01/1970)
+! - Windows ticks (100ns since 01/01/0001)
+'...' - literal text
+'' - single quote
+</code></pre>
+
+<h2>
+<a name="alternatives" class="anchor" href="#alternatives"><span class="octicon octicon-link"></span></a>Alternatives</h2>
+
+<p><a href="https://github.com/lucianocosta/jquery.mtz.monthpicker">Luciano Costa</a> has developed his own implementation from scratch of a Monthpicker.
+It is far better than most JQuery UI Datepicker hacks you will find on the internet but it has some severe limitations: it has very limited settings, settings are shared by all instances on the same page...</p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/zorab47">zorab47</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
