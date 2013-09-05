@@ -57,17 +57,19 @@ monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
 
 Date Formatting:
 
-  The format can be combinations of the following:
-  m  - month of year (no leading zero)
-  mm - month of year (two digit)
-  M  - month name short
-  MM - month name long
-  y  - year (two digit)
-  yy - year (four digit)
-  @ - Unix timestamp (ms since 01/01/1970)
-  ! - Windows ticks (100ns since 01/01/0001)
-  '...' - literal text
-  '' - single quote
+```
+The format can be combinations of the following:
+m  - month of year (no leading zero)
+mm - month of year (two digit)
+M  - month name short
+MM - month name long
+y  - year (two digit)
+yy - year (four digit)
+@ - Unix timestamp (ms since 01/01/1970)
+! - Windows ticks (100ns since 01/01/0001)
+'...' - literal text
+'' - single quote
+```
 
 Alternatives
 ---
