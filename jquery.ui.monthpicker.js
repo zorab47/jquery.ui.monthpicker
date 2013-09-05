@@ -4,11 +4,11 @@
  * MIT License
  * Copyright (c) 2011, Julien Poumailloux
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to deal 
- * in the Software without restriction, including without limitation the rights 
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
- * copies of the Software, and to permit persons to whom the Software is 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software i
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
@@ -215,7 +215,7 @@
 		},
 
 		/* Pop-up the month picker for a given input field.
-		   If false returned from beforeShow event handler do not show. 
+		   If false returned from beforeShow event handler do not show.
 		   @param  input  element - the input field attached to the date picker or
 						  event - if triggered by focus */
 		_showMonthpicker: function(input) {
@@ -312,7 +312,7 @@
 					// this breaks the change event in IE
 					inst.input.is(':visible') && !inst.input.is(':disabled') && inst.input[0] != document.activeElement)
 				inst.input.focus();
-			// deffered render of the years select (to avoid flashes on Firefox) 
+			// deffered render of the years select (to avoid flashes on Firefox)
 			if( inst.yearshtml ){
 				var origyearshtml = inst.yearshtml;
 				setTimeout(function(){
@@ -524,7 +524,7 @@
 					' title="' + nextText + '"><span class="ui-icon ui-icon-circle-triangle-e">' + nextText + '</span></a>';
 
 				html += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">' +
-					prev + next + 
+					prev + next +
 					this._generateYearHeader(inst, drawYear, monthNames, monthNamesShort) + // draw month headers
 					'</div><table class="ui-datepicker-calendar"><tbody>';
 			
@@ -1008,7 +1008,7 @@
 	 * Bind hover events for monthpicker elements.
 	 * Done via delegate so the binding only occurs once in the lifetime of the parent div.
 	 * Global instActive, set by _updateMonthpicker allows the handlers to find their way back to the active picker.
-	 */ 
+	 */
 	function bindHover(dpDiv) {
 		var selector = '.ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a';
 		return dpDiv.delegate(selector, 'mouseout', function() {
