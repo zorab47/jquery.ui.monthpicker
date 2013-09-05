@@ -557,27 +557,32 @@
 			// year selection
 			if ( !inst.yearshtml ) {
 				inst.yearshtml = '';
-				// determine range of years to display
-				var years = this._get(inst, 'yearRange').split(':');
-				var thisYear = new Date().getFullYear();
-				var determineYear = function(value) {
-					var year = (value.match(/c[+-].*/) ? drawYear + parseInt(value.substring(1), 10) :
-						(value.match(/[+-].*/) ? thisYear + parseInt(value, 10) :
-						parseInt(value, 10)));
-					return (isNaN(year) ? thisYear : year);
-				};
-				var year = determineYear(years[0]);
-				var endYear = Math.max(year, determineYear(years[1] || ''));
-				
-				inst.yearshtml += '<select class="ui-datepicker-year" ' +
-					'onchange="MP_jQuery_' + dpuuid + '.monthpicker._selectYear(\'#' + inst.id + '\', this, \'Y\');" ' +
-					'>';
-				for (; year <= endYear; year++) {
-					inst.yearshtml += '<option value="' + year + '"' +
-						(year == drawYear ? ' selected="selected"' : '') +
-						'>' + year + '</option>';
+
+				if (changeYear) {
+					// determine range of years to display
+					var years = this._get(inst, 'yearRange').split(':');
+					var thisYear = new Date().getFullYear();
+					var determineYear = function(value) {
+						var year = (value.match(/c[+-].*/) ? drawYear + parseInt(value.substring(1), 10) :
+							(value.match(/[+-].*/) ? thisYear + parseInt(value, 10) :
+							parseInt(value, 10)));
+						return (isNaN(year) ? thisYear : year);
+					};
+					var year = determineYear(years[0]);
+					var endYear = Math.max(year, determineYear(years[1] || ''));
+					
+					inst.yearshtml += '<select class="ui-datepicker-year" ' +
+						'onchange="MP_jQuery_' + dpuuid + '.monthpicker._selectYear(\'#' + inst.id + '\', this, \'Y\');" ' +
+						'>';
+					for (; year <= endYear; year++) {
+						inst.yearshtml += '<option value="' + year + '"' +
+							(year == drawYear ? ' selected="selected"' : '') +
+							'>' + year + '</option>';
+					}
+					inst.yearshtml += '</select>';
+				} else {
+					inst.yearshtml += '<span class="ui-datepicker-year">' + drawYear + '</span>';
 				}
-				inst.yearshtml += '</select>';
 				
 				html += inst.yearshtml;
 				inst.yearshtml = null;
