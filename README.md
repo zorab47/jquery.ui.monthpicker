@@ -1,4 +1,4 @@
-# A Month Picker for [jQuery UI][]
+# A Monthpicker for [jQuery UI][]
 
 ![jquery.ui.monthpicker][jquery.ui.monthpicker-image]
 
