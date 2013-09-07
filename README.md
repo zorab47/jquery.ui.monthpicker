@@ -65,7 +65,7 @@ The format can be combinations of the following:
 
 ## Alternative Monthpickers
 
-[Luciano Costa][] has developed his own implementation of a Monthpicker from scratch. It is far better than most jQuery UI Datepicker hacks you will find, but it has some severe limitations: it has very limited settings, settings are shared by all instances on the same page.
+[Luciano Costa][] has developed his own implementation of a Monthpicker from scratch.
 
 [jQuery UI]: http://jqueryui.com
 [jQuery UI Datepicker]: http://jqueryui.com/demos/datepicker/
