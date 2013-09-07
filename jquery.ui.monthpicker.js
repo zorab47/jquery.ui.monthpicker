@@ -227,7 +227,7 @@
 		/* Pop-up the month picker for a given input field.
 		   If false returned from beforeShow event handler do not show.
 		   @param  input  element - the input field attached to the date picker or
-						  event - if triggered by focus */
+						          event - if triggered by focus */
 		_showMonthpicker: function(input) {
 			input = input.target || input;
 			if (input.nodeName.toLowerCase() != 'input') // find from button/image trigger
@@ -641,10 +641,9 @@
 		_generateHTML: function(inst) {
       var printDate;
 			var today = new Date();
-			today = this._daylightSavingAdjust(
-				new Date(today.getFullYear(), today.getMonth(), today.getDate())); // clear time
-			var currentDate = this._daylightSavingAdjust((!inst.currentMonth ? new Date(9999, 9, 9) :
-				new Date(inst.currentYear, inst.currentMonth, 1)));
+			today = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // clear time
+			var currentDate = (!inst.currentMonth ? new Date(9999, 9, 9) :
+				new Date(inst.currentYear, inst.currentMonth, 1));
 			var html = '';
 			var year = currentDate && currentDate.year ? currentDate.year : 2011;
 			var prevText = this._get(inst, 'prevText');
@@ -842,18 +841,6 @@
 			return newDate;
 		},
 		
-		/* Handle switch to/from daylight saving.
-		   Hours may be non-zero on daylight saving cut-over:
-		   > 12 when midnight changeover, but then cannot generate
-		   midnight datetime, so jump to 1AM, otherwise reset.
-		   @param  date  (Date) the date to check
-		   @return  (Date) the corrected date */
-		_daylightSavingAdjust: function(date) {
-			if (!date) return null;
-			date.setHours(date.getHours() > 12 ? date.getHours() + 2 : 0);
-			return date;
-		},
-		
 		/* Determine the current maximum date - ensure no time components are set. */
 		_getMinMaxDate: function(inst, minMax) {
 			return this._determineDate(inst, this._get(inst, minMax + 'Date'), null);
@@ -1023,7 +1010,7 @@
 			else if (year < 100)
 				year += new Date().getFullYear() - new Date().getFullYear() % 100 +
 					(year <= shortYearCutoff ? 0 : -100);
-			var date = this._daylightSavingAdjust(new Date(year, month - 1, 1));
+			var date = new Date(year, month - 1, 1);
 			if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != 1)
 				throw 'Invalid date'; // E.g. 31/02/00
 			return date;
@@ -1267,8 +1254,8 @@
 				inst.currentYear = inst.selectedYear;
 			}
 			var date = (month ? (typeof month == 'object' ? month :
-				this._daylightSavingAdjust(new Date(year, month, 1))) :
-				this._daylightSavingAdjust(new Date(inst.currentYear, inst.currentMonth, 1)));
+				new Date(year, month, 1)) :
+				new Date(inst.currentYear, inst.currentMonth, 1));
 			return this.formatDate(this._get(inst, 'dateFormat'), date, this._getFormatConfig(inst));
 		}
 	});
