@@ -27,7 +27,6 @@
 	$.extend($.ui, { monthpicker: { version: "@VERSION" } });
 
 	var PROP_NAME = 'monthpicker';
-	var dpuuid = new Date().getTime();
 	var instActive;
 
 	/* Month picker manager.
@@ -731,8 +730,8 @@
 					var endYear = Math.max(year, determineYear(years[1] || ''));
 					
 					inst.yearshtml += '<select class="ui-datepicker-year" ' +
-						'onchange="MP_jQuery_' + dpuuid + '.monthpicker._selectYear(\'#' + inst.id + '\', this, \'Y\');" ' +
-						'>';
+            "data-handler='selectYear' data-event='change'>";
+
 					for (; year <= endYear; year++) {
 						inst.yearshtml += '<option value="' + year + '"' +
 							(year == drawYear ? ' selected="selected"' : '') +
@@ -1189,8 +1188,8 @@
             return false;
           },
           selectYear: function () {
-            //$.monthpicker._selectMonthYear(id, this, "Y");
-            //return false;
+            $.monthpicker._selectYear(id, this, "Y");
+            return false;
           }
         };
         $(this).bind(this.getAttribute("data-event"), handler[this.getAttribute("data-handler")]);
@@ -1338,8 +1337,5 @@
 	
 	$.monthpicker = new Monthpicker(); // singleton instance
 	$.monthpicker.initialized = false;
-	
-	// Add another global to avoid noConflict issues with inline event handlers
-	window['MP_jQuery_' + dpuuid] = $;
 
 })(jQuery);
