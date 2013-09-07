@@ -568,11 +568,11 @@
 					html += '<tr>';
 				}
 				
-				html += '<td style="padding:1px;cursor:default;" data-month="' + i + '" data-year="' + drawYear + '" data-handler="selectMonth" data-event="click">'
-					+ '<a  style="text-align: center;" class="ui-state-default'
+				html += '<td data-month="' + i + '" data-year="' + drawYear + '" data-handler="selectMonth" data-event="click">'
+					+ '<a class="ui-state-default'
 					+ (drawYear == inst.currentYear && i == inst.currentMonth ? ' ui-state-active' : '') // highlight selected month
 					+ (drawYear == today.getFullYear() && i == today.getMonth() ? ' ui-state-highlight' : '') // highlight today (if different)
-					+ ' href="#">' + (inst.settings && inst.settings.monthNamesShort ? inst.settings.monthNamesShort[i] : this._defaults.monthNamesShort[i]) + '</a>' + '</td>'; // display selectable date
+					+ '" href="#">' + (inst.settings && inst.settings.monthNamesShort ? inst.settings.monthNamesShort[i] : this._defaults.monthNamesShort[i]) + '</a>' + '</td>'; // display selectable date
 				
 				if (i % 3 === 2) {
 					html += '</tr>';
@@ -1061,6 +1061,7 @@
           },
           selectYear: function () {
             //$.datepicker._selectMonthYear(id, this, "Y");
+            //$.monthpicker._selectMonthYear(id, this, "Y");
             //return false;
           }
         };
@@ -1083,6 +1084,7 @@
 
       if (arguments.length === 2 && typeof name === "string") {
         return (name === "defaults" ? $.extend({}, $.datepicker._defaults) :
+        return (name === "defaults" ? $.extend({}, $.monthpicker._defaults) :
           (inst ? (name === "all" ? $.extend({}, inst.settings) :
           this._get(inst, name)) : null));
       }
