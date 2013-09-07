@@ -567,8 +567,7 @@
 		_notifyChange: function(inst) {
 			var onChange = this._get(inst, 'onChangeYear');
 			if (onChange)
-				onChange.apply((inst.input ? inst.input[0] : null),
-					[inst.selectedYear + 1, inst]);
+				onChange.apply((inst.input ? inst.input[0] : null), [inst.selectedYear, inst]);
 		},
 		
 		/* Detach a datepicker from its control.
@@ -1145,6 +1144,37 @@
 			}
 		},
 
+    /* Set the date(s) directly. */
+    _setDate: function(inst, date, noChange) {
+      var clear = !date,
+        origMonth = inst.selectedMonth,
+        origYear = inst.selectedYear,
+        newDate = this._restrictMinMax(inst, this._determineDate(inst, date, new Date()));
+
+      inst.drawMonth = inst.selectedMonth = inst.currentMonth = newDate.getMonth();
+      inst.drawYear = inst.selectedYear = inst.currentYear = newDate.getFullYear();
+      if ((origYear !== inst.selectedYear) && !noChange) {
+        this._notifyChange(inst);
+      }
+      this._adjustInstDate(inst);
+      if (inst.input) {
+        inst.input.val(clear ? "" : this._formatDate(inst));
+      }
+    },
+
+    /* Set the dates for a jQuery selection.
+     * @param  target element - the target input field or division or span
+     * @param  date	Date - the new date
+     */
+    _setDateMonthpicker: function(target, date) {
+      var inst = this._getInst(target);
+      if (inst) {
+        this._setDate(inst, date);
+        this._updateMonthpicker(inst);
+        this._updateAlternate(inst);
+      }
+    },
+
     _getDate: function(inst) {
       date = (!inst.currentMonth ? null : new Date(inst.currentYear, inst.currentMonth, 1));
 			return date;
@@ -1310,6 +1340,10 @@
 
 		var otherArgs = Array.prototype.slice.call(arguments, 1);
     if (typeof options === "string" && (options === "isDisabled" || options === "getDate" || options === "widget")) {
+      return $.monthpicker["_" + options + "Monthpicker"].
+        apply($.monthpicker, [this[0]].concat(otherArgs));
+    }
+    if (options === "option" && arguments.length === 2 && typeof arguments[1] === "string") {
       return $.monthpicker["_" + options + "Monthpicker"].
         apply($.monthpicker, [this[0]].concat(otherArgs));
     }
