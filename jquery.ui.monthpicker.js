@@ -51,6 +51,7 @@
 				'July','August','September','October','November','December'], // Names of months for drop-down and formatting
 			monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // For formatting
 			dateFormat: 'mm/yy',
+      isRTL: false,
 			yearSuffix: '' // Additional text to append to the year in the month headers
 		};
 		this._defaults = { // Global defaults for all the date picker instances
@@ -1008,6 +1009,20 @@
 				$(altField).each(function() { $(this).val(dateStr); });
 			}
 		},
+
+    _getDate: function(inst) {
+      date = (!inst.currentMonth ? null : new Date(inst.currentYear, inst.currentMonth, 1));
+			return date;
+    },
+
+    /* Get the date(s) for the first entry in a jQuery selection.
+     * @param  target element - the target input field or division or span
+     * @return Date - the current date
+     */
+    _getDateMonthpicker: function(target) {
+      var inst = this._getInst(target);
+      return (inst ? this._getDate(inst) : null);
+    },
 		
 		/* Format the given date for display. */
 		_formatDate: function(inst, month, year) {
@@ -1071,8 +1086,13 @@
 		}
 
 		var otherArgs = Array.prototype.slice.call(arguments, 1);
+    if (typeof options === "string" && (options === "isDisabled" || options === "getDate" || options === "widget")) {
+      return $.monthpicker["_" + options + "Monthpicker"].
+        apply($.monthpicker, [this[0]].concat(otherArgs));
+    }
+
 		return this.each(function() {
-			typeof options == 'string' ?
+			typeof options === 'string' ?
 				$.monthpicker['_' + options + 'Monthpicker'].
 					apply($.monthpicker, [this].concat(otherArgs)) :
 				$.monthpicker._attachMonthpicker(this, options);
