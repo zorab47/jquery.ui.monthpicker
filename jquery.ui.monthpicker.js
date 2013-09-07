@@ -37,12 +37,15 @@
 
 	function Monthpicker() {
 		this.uuid = 0;
+    this._keyEvent = false; // If the last event was a key event
 		this._curInst = null; // The current instance in use
 		this._disabledInputs = []; // List of date picker inputs that have been disabled
 		this._monthpickerShowing = false; // True if the popup picker is showing , false if not
 		this._mainDivId = 'ui-monthpicker-div'; // The ID of the main monthpicker division
 		this._triggerClass = 'ui-monthpicker-trigger'; // The name of the trigger marker class
 		this._dialogClass = 'ui-monthpicker-dialog'; // The name of the dialog marker class
+    this._currentClass = "ui-datepicker-current-day"; // The name of the current day marker class
+    this._dayOverClass = "ui-datepicker-days-cell-over"; // The name of the day hover marker class
 		this.regional = []; // Available regional settings, indexed by language code
 		this.regional[''] = { // Default regional settings
       closeText: "Done", // Display text for close link
@@ -73,6 +76,10 @@
 			onChangeYear: null, // Define a callback function when the year is changed
 			onClose: null, // Define a callback function when the monthpicker is closed
 			stepYears: 1, // Number of months to step back/forward
+			stepBigYears: 3, // Number of months to step back/forward
+      defaultDate: null, // Used when field is blank: actual date,
+      minDate: null, // The earliest selectable date, or null for no limit
+      maxDate: null, // The latest selectable date, or null for no limit
 			altField: '', // Selector for an alternate field to store selected dates into
 			altFormat: '', // The date format to use for the alternate field
 			disabled: false // The initial disabled state
@@ -372,6 +379,105 @@
 				this._inDialog = false;
 			}
 		},
+
+	/* Handle keystrokes. */
+	_doKeyDown: function(event) {
+		var onSelect, dateStr, sel,
+			inst = $.monthpicker._getInst(event.target),
+			handled = true,
+			isRTL = inst.dpDiv.is(".ui-datepicker-rtl");
+
+		inst._keyEvent = true;
+		if ($.monthpicker._monthpickerShowing) {
+			switch (event.keyCode) {
+				case 9: $.monthpicker._hideMonthpicker();
+						handled = false;
+						break; // hide on tab out
+				case 13: sel = $("td." + $.monthpicker._dayOverClass + ":not(." +
+									$.monthpicker._currentClass + ")", inst.dpDiv);
+
+						if (sel[0]) {
+							$.monthpicker._selectMonth(event.target, inst.selectedYear, inst.selectedMonth, sel[0]);
+						}
+
+						onSelect = $.monthpicker._get(inst, "onSelect");
+						if (onSelect) {
+							dateStr = $.monthpicker._formatDate(inst);
+
+							// trigger custom callback
+							onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+						} else {
+							$.monthpicker._hideMonthpicker();
+						}
+
+						return false; // don't submit the form
+				case 27: $.monthpicker._hideMonthpicker();
+						break; // hide on escape
+				case 33: $.monthpicker._adjustDate(event.target, (event.ctrlKey ?
+							-$.monthpicker._get(inst, "stepBigYears") :
+							-$.monthpicker._get(inst, "stepYears")), "Y");
+						break; // previous year on page up/+ ctrl
+				case 34: $.monthpicker._adjustDate(event.target, (event.ctrlKey ?
+							+$.monthpicker._get(inst, "stepBigYears") :
+							+$.monthpicker._get(inst, "stepYears")), "Y");
+						break; // next year on page down/+ ctrl
+				case 35: if (event.ctrlKey || event.metaKey) {
+							$.monthpicker._clearDate(event.target);
+						}
+						handled = event.ctrlKey || event.metaKey;
+						break; // clear on ctrl or command +end
+				case 36: if (event.ctrlKey || event.metaKey) {
+							$.monthpicker._gotoCurrentMonth(event.target);
+						}
+						handled = event.ctrlKey || event.metaKey;
+						break; // current on ctrl or command +home
+				case 37: if (event.ctrlKey || event.metaKey) {
+							$.monthpicker._adjustDate(event.target, (isRTL ? +1 : -1), "M");
+						}
+						handled = event.ctrlKey || event.metaKey;
+						// -1 month on ctrl or command +left
+						if (event.originalEvent.altKey) {
+							$.monthpicker._adjustDate(event.target, (event.ctrlKey ?
+								-$.monthpicker._get(inst, "stepBigYears") :
+								-$.monthpicker._get(inst, "stepYears")), "Y");
+						}
+						// next year on alt +left on Mac
+						break;
+				case 38: if (event.ctrlKey || event.metaKey) {
+							$.monthpicker._adjustDate(event.target, -3, "M");
+						}
+						handled = event.ctrlKey || event.metaKey;
+						break; // -1 quarter on ctrl or command +up
+				case 39: if (event.ctrlKey || event.metaKey) {
+							$.monthpicker._adjustDate(event.target, (isRTL ? -1 : +1), "M");
+						}
+						handled = event.ctrlKey || event.metaKey;
+						// +1 month on ctrl or command +right
+						if (event.originalEvent.altKey) {
+							$.monthpicker._adjustDate(event.target, (event.ctrlKey ?
+								+$.monthpicker._get(inst, "stepBigYears") :
+								+$.monthpicker._get(inst, "stepYears")), "Y");
+						}
+						// next year on alt +right
+						break;
+				case 40: if (event.ctrlKey || event.metaKey) {
+							$.monthpicker._adjustDate(event.target, +3, "M");
+						}
+						handled = event.ctrlKey || event.metaKey;
+						break; // +1 quarter on ctrl or command +down
+				default: handled = false;
+			}
+		} else if (event.keyCode === 36 && event.ctrlKey) { // display the date picker on ctrl+home
+			$.monthpicker._showDatepicker(this);
+		} else {
+			handled = false;
+		}
+
+		if (handled) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	},
 		
 		/* Is the first field in a jQuery collection disabled as a monthpicker?
 		   @param  target    element - the target input field or division or span
@@ -448,14 +554,14 @@
 		/* Adjust one of the date sub-fields. */
 		_adjustInstDate: function(inst, offset, period) {
 			var year = inst.drawYear + (period == 'Y' ? offset : 0);
-			var month = inst.drawMonth + (period == 'M' ? offset : 0);
-			var day = 1;
-			var date = this._restrictMinMax(inst,
-				this._daylightSavingAdjust(new Date(year, month, day)));
-			inst.drawMonth = inst.selectedMonth = date.getMonth();
+			var month = Math.min(inst.selectedMonth, 12) + (period === "M" ? offset : 0);
+			var date = this._restrictMinMax(inst, new Date(year, month, 1));
 			inst.drawYear = inst.selectedYear = date.getFullYear();
-			if (period == 'M' || period == 'Y')
+			inst.selectedMonth = date.getMonth();
+
+			if (period == 'Y') {
 				this._notifyChange(inst);
+      }
 		},
 		
 		/* Notify change of month/year. */
@@ -534,6 +640,7 @@
 		
 		/* Generate the HTML for the current state of the date picker. */
 		_generateHTML: function(inst) {
+      var printDate;
 			var today = new Date();
 			today = this._daylightSavingAdjust(
 				new Date(today.getFullYear(), today.getMonth(), today.getDate())); // clear time
@@ -549,9 +656,9 @@
 			var drawYear = inst.drawYear;
 			var showButtonPanel = this._get(inst, "showButtonPanel");
 			var isRTL = this._get(inst, "isRTL");
+      var defaultDate = this._getDefaultDate(inst);
+      defaultDate.setDate(1);
           
-      
-
       var prev = '<a class="ui-datepicker-prev ui-corner-all" data-event="click" data-handler="prev"' +
         ' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-w">' + prevText + '</span></a>';
       var next = '<a class="ui-datepicker-next ui-corner-all" data-event="click" data-handler="next"' +
@@ -559,22 +666,31 @@
 
       html += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">' +
         prev + next +
-        this._generateYearHeader(inst, drawYear, monthNames, monthNamesShort) + // draw month headers
+        this._generateYearHeader(inst, drawYear, monthNames, monthNamesShort) + // draw year header
         '</div><table class="ui-datepicker-calendar"><tbody>';
 			
-			// mount months table
-			for(var i=0; i<=11; i++){
-				if (i % 3 === 0) {
+			// draw months table
+			for(var month = 0; month <= 11; month++) {
+				if (month % 3 === 0) {
 					html += '<tr>';
 				}
+
+        printDate = new Date(drawYear, month, 1);
+				var selectedDate = new Date(drawYear, inst.selectedMonth, 1);
 				
-				html += '<td data-month="' + i + '" data-year="' + drawYear + '" data-handler="selectMonth" data-event="click">'
+				html += '<td class="'
+					+ (drawYear == inst.currentYear && month == inst.currentMonth ? " " + this._currentClass : "") // highlight selected month
+          + ((month === inst.selectedMonth && drawYear === inst.selectedYear && inst._keyEvent) || // user pressed key
+							(defaultDate.getTime() === printDate.getTime() && defaultDate.getTime() === selectedDate.getTime()) ?
+							// or defaultDate is current printedDate and defaultDate is selectedDate
+							" " + this._dayOverClass : "") // highlight selected day
+          + '" data-month="' + month + '" data-year="' + drawYear + '" data-handler="selectMonth" data-event="click">'
 					+ '<a class="ui-state-default'
-					+ (drawYear == inst.currentYear && i == inst.currentMonth ? ' ui-state-active' : '') // highlight selected month
-					+ (drawYear == today.getFullYear() && i == today.getMonth() ? ' ui-state-highlight' : '') // highlight today (if different)
-					+ '" href="#">' + (inst.settings && inst.settings.monthNamesShort ? inst.settings.monthNamesShort[i] : this._defaults.monthNamesShort[i]) + '</a>' + '</td>'; // display selectable date
+					+ (drawYear == inst.currentYear && month == inst.currentMonth ? ' ui-state-active' : '') // highlight selected month
+					+ (drawYear == today.getFullYear() && month == today.getMonth() ? ' ui-state-highlight' : '') // highlight today (if different)
+					+ '" href="#">' + (inst.settings && inst.settings.monthNamesShort ? inst.settings.monthNamesShort[month] : this._defaults.monthNamesShort[month]) + '</a>' + '</td>'; // display selectable date
 				
-				if (i % 3 === 2) {
+				if (month % 3 === 2) {
 					html += '</tr>';
 				}
 			}
@@ -724,7 +840,7 @@
 				newDate.setSeconds(0);
 				newDate.setMilliseconds(0);
 			}
-			return this._daylightSavingAdjust(newDate);
+			return newDate;
 		},
 		
 		/* Handle switch to/from daylight saving.
@@ -770,13 +886,26 @@
     },
 
 		/* Action for selecting a month. */
-		_selectMonth: function(id, year, month) {
+		_selectMonth: function(id, year, month, td) {
 			var target = $(id);
 			var inst = this._getInst(target[0]);
+
+      if ($(td).hasClass(this._unselectableClass) || this._isDisabledDatepicker(target[0])) {
+        return;
+      }
+
 			inst.selectedMonth = inst.currentMonth = month;
 			inst.selectedYear = inst.currentYear = year;
 			this._selectDate(id, this._formatDate(inst, inst.currentMonth, inst.currentYear));
 		},
+
+    /* Is the first field in a jQuery collection disabled as a datepicker?
+     * @param  target	element - the target input field or division or span
+     * @return boolean - true if disabled, false if enabled
+     */
+    _isDisabledDatepicker: function(target) {
+      return false;
+    },
 		
 		/* Parse a string value into a date object.
 		   See formatDate below for the possible formats.
@@ -1060,7 +1189,6 @@
             return false;
           },
           selectYear: function () {
-            //$.datepicker._selectMonthYear(id, this, "Y");
             //$.monthpicker._selectMonthYear(id, this, "Y");
             //return false;
           }
@@ -1083,7 +1211,6 @@
         inst = this._getInst(target);
 
       if (arguments.length === 2 && typeof name === "string") {
-        return (name === "defaults" ? $.extend({}, $.datepicker._defaults) :
         return (name === "defaults" ? $.extend({}, $.monthpicker._defaults) :
           (inst ? (name === "all" ? $.extend({}, inst.settings) :
           this._get(inst, name)) : null));

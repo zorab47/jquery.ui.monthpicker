@@ -238,4 +238,137 @@
     //  "Mouse click - next + min/max");
   });
 
+test("keystrokes", function() {
+	expect( 22 );
+	var inp = TestHelpers.monthpicker.init("#inp"),
+		date = new Date();
+  date.setDate(1);
+
+	inp.val("").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke enter");
+
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 4 - 1, 1),
+		"Keystroke enter - preset");
+
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.HOME}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke ctrl+home");
+
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.END});
+	ok(inp.monthpicker("getDate") == null, "Keystroke ctrl+end");
+	inp.val("").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.ESCAPE});
+	ok(inp.monthpicker("getDate") == null, "Keystroke esc");
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.ESCAPE});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 4 - 1, 1),
+		"Keystroke esc - preset");
+
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ESCAPE});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 4 - 1, 1),
+		"Keystroke esc - abandoned");
+
+	// Moving by day or week
+	inp.val("").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.LEFT}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	date.setMonth(date.getMonth() - 1);
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke ctrl+left");
+
+	inp.val("").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.LEFT}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	date.setMonth(date.getMonth() + 1);
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke left");
+
+	inp.val("").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.RIGHT}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	date.setMonth(date.getMonth() + 1);
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke ctrl+right");
+
+	inp.val("").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.RIGHT}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	date.setMonth(date.getMonth() - 1);
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke right");
+
+	inp.val("").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.UP}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	date.setMonth(date.getMonth() - 3);
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke ctrl+up");
+
+	inp.val("").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.UP}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	date.setMonth(date.getMonth() + 3);
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke up");
+
+	inp.val("").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.DOWN}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	date.setMonth(date.getMonth() + 3);
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke ctrl+down");
+
+	inp.val("").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.DOWN}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	date.setMonth(date.getMonth() - 3);
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Keystroke down");
+
+	// Moving by year
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2007, 4 - 1, 1),
+		"Keystroke pgup");
+
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2009, 4 - 1, 1),
+		"Keystroke pgdn");
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2005, 4 - 1, 1),
+		"Keystroke ctrl+pgup");
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2011, 4 - 1, 1),
+		"Keystroke ctrl+pgdn");
+
+	// Goto current
+	inp.monthpicker("option", {gotoCurrent: true}).
+		datepicker("hide").val("04/2008").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.HOME}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 4 - 1, 1),
+		"Keystroke ctrl+home");
+
+	// Change steps
+	inp.monthpicker("option", {stepYears: 2, gotoCurrent: false}).
+		datepicker("hide").val("04/2008").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2006, 4 - 1, 1),
+		"Keystroke pgup step 2");
+
+	inp.val("04/2008").monthpicker("show").
+		simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2010, 4 - 1, 1),
+		"Keystroke pgdn step 2");
+});
+
 })(jQuery);
