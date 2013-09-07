@@ -11,7 +11,7 @@ Happy coding!
 		<meta name='keywords' content='jquery, ui, monthpicker, year-month, plugin' />
 		<meta name='author' content='Julien Poumailloux - http://github.com/thebrowser/jquery.ui.monthpicker' />
 		<title>Monthpicker, the missing JQueryUI widget.</title>
-		<link rel='stylesheet' href='http://jqueryui.com/themes/base/jquery.ui.all.css'> 
+		<link rel='stylesheet' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'> 
 		<style type="text/css">
 			body {
 				margin-top: 1.0em;
@@ -85,8 +85,8 @@ yy - year (four digit)
 '' - single quote</pre>
 			<h2>Contribute!</h2>
 			<pre>$ git clone <a href='http://github.com/thebrowser/jquery.ui.monthpicker'>http://github.com/thebrowser/jquery.ui.monthpicker</a></pre>
-			<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script> 
-			<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js'></script> 
+			<script src='http://code.jquery.com/jquery-1.9.1.js'></script> 
+			<script src='http://code.jquery.com/ui/1.10.3/jquery-ui.js'></script> 
 			<script src='./jquery.ui.monthpicker.js'></script>
 			<script type="text/javascript">
 				jQuery(document).ready(function() {
@@ -101,6 +101,7 @@ yy - year (four digit)
 						showOn:     "both",
 						buttonImage: "images/calendar.png",
 						buttonImageOnly: true,
+            showButtonPanel: true,
 						changeYear: false,
 						yearRange: 'c-2:c+2',
 						dateFormat: 'MM y'
