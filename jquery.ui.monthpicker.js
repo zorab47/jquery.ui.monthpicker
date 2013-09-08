@@ -693,11 +693,11 @@
 			}
 			html += '</tbody></table>';
 
-      controls = "<button type='button' class='ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all' data-handler='hide' data-event='click'>" +
+      var controls = "<button type='button' class='ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all' data-handler='hide' data-event='click'>" +
         this._get(inst, "closeText") + "</button>";
 
       var currentText = this._get(inst, "currentText");
-      buttonPanel = (showButtonPanel) ? "<div class='ui-datepicker-buttonpane ui-widget-content'>" + (isRTL ? controls : "") +
+      var buttonPanel = (showButtonPanel) ? "<div class='ui-datepicker-buttonpane ui-widget-content'>" + (isRTL ? controls : "") +
          "<button type='button' class='ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all' data-handler='current' data-event='click'" +
          ">" + currentText + "</button>" + (isRTL ? "" : controls) + "</div>" : "";
 
@@ -1176,7 +1176,7 @@
     },
 
     _getDate: function(inst) {
-      date = (!inst.currentMonth ? null : new Date(inst.currentYear, inst.currentMonth, 1));
+      var date = (!inst.currentMonth ? null : new Date(inst.currentYear, inst.currentMonth, 1));
 			return date;
     },
 
