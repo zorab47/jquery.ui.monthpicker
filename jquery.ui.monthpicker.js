@@ -355,7 +355,7 @@
 				var duration = this._get(inst, 'duration');
 				var postProcess = function() {
 					$.monthpicker._tidyDialog(inst);
-					this._curInst = null;
+					$.monthpicker._curInst = null;
 				};
 
 				if ( $.effects && $.effects[ showAnim ] )
