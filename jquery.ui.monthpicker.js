@@ -63,6 +63,7 @@
 				// 'button' for trigger button, or 'both' for either
 			showAnim: 'fadeIn', // Name of jQuery animation for popup
       showButtonPanel: false, // True to show button panel, false to not show it
+      appendText: "", // Display text following the input box, e.g. showing the format
 			buttonText: '...', // Text for trigger button
 			buttonImage: '', // URL for trigger button image
 			changeYear: false, // True if year can be selected directly, false if only prev/next
@@ -101,6 +102,16 @@
 		_widgetMonthpicker: function() {
 			return this.dpDiv;
 		},
+
+    /* Override the default settings for all instances of the date picker.
+     * @param  settings  object - the new settings to use as defaults (anonymous object)
+     * @return the manager object
+     */
+    setDefaults: function(settings) {
+      extendRemove(this._defaults, settings || {});
+      return this;
+    },
+
 		
 		/* Retrieve the instance data for the target control.
 		   @param  target  element - the target input field or division or span
@@ -185,26 +196,42 @@
 
 		/* Make attachments based on settings. */
 		_attachments: function(input, inst) {
+			var appendText = this._get(inst, "appendText"),
+        isRTL = this._get(inst, "isRTL");
+
+      if (appendText) {
+        inst.append = $("<span class='" + this._appendClass + "'>" + appendText + "</span>");
+        input[isRTL ? "before" : "after"](inst.append);
+      }
+
 			input.unbind('focus', this._showMonthpicker);
 			if (inst.trigger)
 				inst.trigger.remove();
 			var showOn = this._get(inst, 'showOn');
 			if (showOn == 'focus' || showOn == 'both') // pop-up month picker when in the marked field
 				input.focus(this._showMonthpicker);
-			if (showOn == 'button' || showOn == 'both') { // pop-up month picker when button clicked
-				var buttonText = this._get(inst, 'buttonText');
-				var buttonImage = this._get(inst, 'buttonImage');
-				inst.trigger = $('<img/>').addClass(this._triggerClass).
-						attr({ src: buttonImage, alt: buttonText, title: buttonText });
-				input['after'](inst.trigger);
-				inst.trigger.click(function() {
-					if ($.monthpicker._monthpickerShowing && $.monthpicker._lastInput == input[0])
-						$.monthpicker._hideMonthpicker();
-					else
-						$.monthpicker._showMonthpicker(input[0]);
-					return false;
-				});
-			}
+      if (showOn === "button" || showOn === "both") { // pop-up month picker when button clicked
+        buttonText = this._get(inst, "buttonText");
+        buttonImage = this._get(inst, "buttonImage");
+        inst.trigger = $(this._get(inst, "buttonImageOnly") ?
+          $("<img/>").addClass(this._triggerClass).
+            attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
+          $("<button type='button'></button>").addClass(this._triggerClass).
+            html(!buttonImage ? buttonText : $("<img/>").attr(
+            { src:buttonImage, alt:buttonText, title:buttonText })));
+        input[isRTL ? "before" : "after"](inst.trigger);
+        inst.trigger.click(function() {
+          if ($.monthpicker._monthpickerShowing && $.monthpicker._lastInput === input[0]) {
+            $.monthpicker._hideMonthpicker();
+          } else if ($.monthpicker._monthpickerShowing && $.monthpicker._lastInput !== input[0]) {
+            $.monthpicker._hideMonthpicker();
+            $.monthpicker._showMonthpicker(input[0]);
+          } else {
+            $.monthpicker._showMonthpicker(input[0]);
+          }
+          return false;
+        });
+      }
 		},
 		
 		/* Close month picker if clicked elsewhere. */
@@ -467,7 +494,7 @@
 				default: handled = false;
 			}
 		} else if (event.keyCode === 36 && event.ctrlKey) { // display the date picker on ctrl+home
-			$.monthpicker._showDatepicker(this);
+			$.monthpicker._showMonthpicker(this);
 		} else {
 			handled = false;
 		}
@@ -875,7 +902,7 @@
 			var target = $(id);
 			var inst = this._getInst(target[0]);
 
-      if ($(td).hasClass(this._unselectableClass) || this._isDisabledDatepicker(target[0])) {
+      if ($(td).hasClass(this._unselectableClass) || this._isDisabledMonthpicker(target[0])) {
         return;
       }
 
@@ -888,7 +915,7 @@
      * @param  target	element - the target input field or division or span
      * @return boolean - true if disabled, false if enabled
      */
-    _isDisabledDatepicker: function(target) {
+    _isDisabledMonthpicker: function(target) {
       return false;
     },
 		
@@ -1256,9 +1283,9 @@
         }
         if ( "disabled" in settings ) {
           if ( settings.disabled ) {
-            this._disableDatepicker(target);
+            this._disableMonthpicker(target);
           } else {
-            this._enableDatepicker(target);
+            this._enableMonthpicker(target);
           }
         }
         this._attachments($(target), inst);
