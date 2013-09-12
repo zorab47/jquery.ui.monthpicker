@@ -910,14 +910,6 @@
 			inst.selectedYear = inst.currentYear = year;
 			this._selectDate(id, this._formatDate(inst, inst.currentMonth, inst.currentYear));
 		},
-
-    /* Is the first field in a jQuery collection disabled as a datepicker?
-     * @param  target	element - the target input field or division or span
-     * @return boolean - true if disabled, false if enabled
-     */
-    _isDisabledMonthpicker: function(target) {
-      return false;
-    },
 		
 		/* Parse a string value into a date object.
 		   See formatDate below for the possible formats.
