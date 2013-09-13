@@ -67,6 +67,7 @@
 			buttonText: '...', // Text for trigger button
 			buttonImage: '', // URL for trigger button image
 			changeYear: false, // True if year can be selected directly, false if only prev/next
+			navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
 			yearRange: 'c-10:c+10', // Range of years to display in drop-down,
 				// either relative to today's year (-nn:+nn), relative to currently displayed year
 				// (c-nn:c+nn), absolute (nnnn:nnnn), or a combination of the above (nnnn:-n)
@@ -681,7 +682,15 @@
 			var showButtonPanel = this._get(inst, "showButtonPanel");
 			var isRTL = this._get(inst, "isRTL");
       var defaultDate = this._getDefaultDate(inst);
+			var navigationAsDateFormat = this._get(inst, "navigationAsDateFormat");
       defaultDate.setDate(1);
+
+			prevText = (!navigationAsDateFormat ? prevText : this.formatDate(prevText,
+				new Date(drawYear - stepYears, 1, 1),
+				this._getFormatConfig(inst)));
+			nextText = (!navigationAsDateFormat ? nextText : this.formatDate(nextText,
+				new Date(drawYear + stepYears, 1, 1),
+				this._getFormatConfig(inst)));
           
       var prev = '<a class="ui-datepicker-prev ui-corner-all" data-event="click" data-handler="prev"' +
         ' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-w">' + prevText + '</span></a>';
@@ -689,8 +698,7 @@
         ' title="' + nextText + '"><span class="ui-icon ui-icon-circle-triangle-e">' + nextText + '</span></a>';
 
       html += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">' +
-        prev + next +
-        this._generateYearHeader(inst, drawYear, monthNames, monthNamesShort) + // draw year header
+        prev + next + this._generateYearHeader(inst, drawYear) + // draw year header
         '</div><table class="ui-datepicker-calendar"><tbody>';
 			
 			// draw months table
@@ -701,7 +709,7 @@
 
         printDate = new Date(drawYear, month, 1);
 				var selectedDate = new Date(drawYear, inst.selectedMonth, 1);
-				
+
 				html += '<td class="'
 					+ (drawYear == inst.currentYear && month == inst.currentMonth ? " " + this._currentClass : "") // highlight selected month
           + ((month === inst.selectedMonth && drawYear === inst.selectedYear && inst._keyEvent) || // user pressed key
@@ -724,6 +732,9 @@
         this._get(inst, "closeText") + "</button>";
 
       var currentText = this._get(inst, "currentText");
+      currentText = (!navigationAsDateFormat ? currentText :
+        this.formatDate(currentText, today, this._getFormatConfig(inst)));
+				
       var buttonPanel = (showButtonPanel) ? "<div class='ui-datepicker-buttonpane ui-widget-content'>" + (isRTL ? controls : "") +
          "<button type='button' class='ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all' data-handler='current' data-event='click'" +
          ">" + currentText + "</button>" + (isRTL ? "" : controls) + "</div>" : "";
@@ -733,8 +744,8 @@
 			return html;
 		},
 			
-		/* Generate the month and year header. */
-		_generateYearHeader: function(inst, drawYear, monthNames, monthNamesShort) {
+		/* Generate the year header. */
+		_generateYearHeader: function(inst, drawYear) {
 			var changeYear = this._get(inst, 'changeYear');
 			var html = '<div class="ui-datepicker-title">';
 			// year selection
