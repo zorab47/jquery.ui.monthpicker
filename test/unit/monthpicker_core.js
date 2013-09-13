@@ -26,8 +26,7 @@
 
   TestHelpers.monthpicker = {
     addMonths: function(date, offset) {
-        var maxDay = 32 - new Date(date.getFullYear(), date.getMonth() + offset, 32).getDate();
-        date.setDate(Math.min(date.getDate(), maxDay));
+        date.setDate(1);
         date.setMonth(date.getMonth() + offset);
         return date;
     },

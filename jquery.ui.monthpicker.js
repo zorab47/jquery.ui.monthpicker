@@ -818,7 +818,8 @@
 		_determineDate: function(inst, date, defaultDate) {
 			var offsetNumeric = function(offset) {
 				var date = new Date();
-				date.setDate(date.getDate() + offset);
+        date.setDate(1);
+				date.setMonth(date.getMonth() + offset);
 				return date;
 			};
 			var offsetString = function(offset) {
@@ -833,22 +834,18 @@
 					$.monthpicker._getDate(inst) : null) || new Date();
 				var year = date.getFullYear();
 				var month = date.getMonth();
-				var day = date.getDate();
-				var pattern = /([+-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?/g;
+				var day = 1;
+				var pattern = /([+-]?[0-9]+)\s*(m|M|y|Y)?/g;
 				var matches = pattern.exec(offset);
 				while (matches) {
-					switch (matches[2] || 'd') {
-						case 'd' : case 'D' :
-							day += parseInt(matches[1],10); break;
-						case 'w' : case 'W' :
-							day += parseInt(matches[1],10) * 7; break;
+					switch (matches[2] || 'm') {
 						case 'm' : case 'M' :
 							month += parseInt(matches[1],10);
-							day = Math.min(day, $.monthpicker._getDaysInMonth(year, month));
+							day = 1
 							break;
 						case 'y': case 'Y' :
 							year += parseInt(matches[1],10);
-							day = Math.min(day, $.monthpicker._getDaysInMonth(year, month));
+							day = 1
 							break;
 					}
 					matches = pattern.exec(offset);
