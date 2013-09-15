@@ -66,6 +66,7 @@
       appendText: "", // Display text following the input box, e.g. showing the format
 			buttonText: '...', // Text for trigger button
 			buttonImage: '', // URL for trigger button image
+			gotoCurrent: false, // True if today link goes back to current selection instead
 			changeYear: false, // True if year can be selected directly, false if only prev/next
 			navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
 			yearRange: 'c-10:c+10', // Range of years to display in drop-down,
@@ -691,7 +692,7 @@
 			nextText = (!navigationAsDateFormat ? nextText : this.formatDate(nextText,
 				new Date(drawYear + stepYears, 1, 1),
 				this._getFormatConfig(inst)));
-          
+
       var prev = '<a class="ui-datepicker-prev ui-corner-all" data-event="click" data-handler="prev"' +
         ' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-w">' + prevText + '</span></a>';
       var next = '<a class="ui-datepicker-next ui-corner-all" data-event="click" data-handler="next"' +
@@ -731,10 +732,11 @@
       var controls = "<button type='button' class='ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all' data-handler='hide' data-event='click'>" +
         this._get(inst, "closeText") + "</button>";
 
-      var currentText = this._get(inst, "currentText");
-      currentText = (!navigationAsDateFormat ? currentText :
-        this.formatDate(currentText, today, this._getFormatConfig(inst)));
-				
+			var currentText = this._get(inst, "currentText");
+			var gotoDate = (this._get(inst, "gotoCurrent") && inst.currentMonth ? currentDate : today);
+			currentText = (!navigationAsDateFormat ? currentText :
+				this.formatDate(currentText, gotoDate, this._getFormatConfig(inst)));
+
       var buttonPanel = (showButtonPanel) ? "<div class='ui-datepicker-buttonpane ui-widget-content'>" + (isRTL ? controls : "") +
          "<button type='button' class='ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all' data-handler='current' data-event='click'" +
          ">" + currentText + "</button>" + (isRTL ? "" : controls) + "</div>" : "";
