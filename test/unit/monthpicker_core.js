@@ -206,9 +206,10 @@
       "Mouse click - abandoned");
 
     // Current/previous/next
-    inp.val("04/2008").monthpicker("show");
+    inp.val("04/2008").monthpicker("option", {showButtonPanel: true}).monthpicker("show");
     $(".ui-datepicker-current", mp).simulate("click", {});
-    date.setMonth(new Date().getMonth());
+    $(".ui-datepicker-calendar tbody a:contains(Feb)", mp).simulate("click", {});
+    date.setMonth(2 - 1);
     TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date, "Mouse click - current");
 
     inp.val("04/2008").monthpicker("show");

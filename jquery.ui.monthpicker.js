@@ -454,7 +454,7 @@
 						handled = event.ctrlKey || event.metaKey;
 						break; // clear on ctrl or command +end
 				case 36: if (event.ctrlKey || event.metaKey) {
-							$.monthpicker._gotoCurrentMonth(event.target);
+							$.monthpicker._gotoCurrent(event.target);
 						}
 						handled = event.ctrlKey || event.metaKey;
 						break; // current on ctrl or command +home
@@ -900,9 +900,24 @@
 			this._adjustDate(target);
 		},
 
-		_gotoCurrentMonth: function(id, year, month) {
-      var date = new Date();
-      this._selectMonth(id, date.getFullYear(), date.getMonth());
+    /* Action for current link. */
+    _gotoCurrent: function(id) {
+      var date,
+        target = $(id),
+        inst = this._getInst(target[0]);
+
+      if (this._get(inst, "gotoCurrent") && inst.currentYear) {
+        inst.selectedDay = inst.currentDay;
+        inst.drawMonth = inst.selectedMonth = inst.currentMonth;
+        inst.drawYear = inst.selectedYear = inst.currentYear;
+      } else {
+        date = new Date();
+        inst.selectedDay = date.getDate();
+        inst.drawMonth = inst.selectedMonth = date.getMonth();
+        inst.drawYear = inst.selectedYear = date.getFullYear();
+      }
+      this._notifyChange(inst);
+      this._adjustDate(target);
     },
 
 		/* Action for selecting a month. */
@@ -1136,8 +1151,7 @@
 		/* Erase the input field and hide the date picker. */
 		_clearDate: function(id) {
 			var target = $(id);
-			var inst = this._getInst(target[0]);
-			this._selectDate(target, '');
+			this._selectDate(target, "");
 		},
 
 		/* Update the input field with the selected date. */
@@ -1203,8 +1217,10 @@
     },
 
     _getDate: function(inst) {
-      var date = (!inst.currentMonth ? null : new Date(inst.currentYear, inst.currentMonth, 1));
-			return date;
+      var date = (!inst.currentYear || (inst.input && inst.input.val() === "") ? null : 
+        new Date(inst.currentYear, inst.currentMonth, 1));
+
+      return date;
     },
 
     /* Attach the onxxx handlers.  These are declared statically so
@@ -1225,7 +1241,7 @@
             $.monthpicker._hideMonthpicker();
           },
           current: function () {
-            $.monthpicker._gotoCurrentMonth(id);
+            $.monthpicker._gotoCurrent(id);
           },
           selectMonth: function () {
             $.monthpicker._selectMonth(id, +this.getAttribute("data-year"), +this.getAttribute("data-month"), this);

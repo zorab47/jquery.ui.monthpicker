@@ -56,14 +56,12 @@ test("events", function() {
 	date = new Date();
 	date.setDate(1);
 
-
 	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP});
 	date.setYear(date.getFullYear() - 1);
 	equal(selectedThis, inp[0], "Callback change year this");
 	equal(selectedInst, $.data(inp[0], TestHelpers.monthpicker.PROP_NAME), "Callback change year inst");
 	equal(selectedDate, newMonthYear(date),
 		"Callback change year date - pgup");
-
 
 	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN});
 	date.setYear(date.getFullYear() + 1);
@@ -76,12 +74,11 @@ test("events", function() {
 		"Callback change year date - ctrl+pgup");
 
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.HOME});
-	date.setFullYear(date.getFullYear());
-	equal(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(new Date()),
 		"Callback change year date - ctrl+home");
 
 	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN});
-	date.setFullYear(date.getFullYear());
+	date.setFullYear(new Date().getFullYear() + 3);
 	equal(selectedDate, newMonthYear(date),
 		"Callback change year date - ctrl+pgdn");
 
