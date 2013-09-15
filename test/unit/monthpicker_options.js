@@ -343,90 +343,95 @@ test("minMax", function() {
 	var date,
 		inp = TestHelpers.monthpicker.init("#inp"),
 		dp = $("#ui-monthpicker-div"),
-		lastYear = new Date(2007, 6 - 1, 4),
-		nextYear = new Date(2009, 6 - 1, 4),
-		minDate = new Date(2008, 2 - 1, 29),
-		maxDate = new Date(2008, 12 - 1, 7);
-	inp.val("06/04/2008").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		lastYear = new Date(2007, 6 - 1, 1),
+		nextYear = new Date(2009, 6 - 1, 1),
+		minDate = new Date(2008, 2 - 1, 1),
+		maxDate = new Date(2008, 12 - 1, 1);
+	inp.val("06/2008").monthpicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), lastYear,
-		"Min/max - null, null - ctrl+pgup");
-	inp.val("06/04/2008").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		"Min/max - null, null - pgup");
+	inp.val("06/2008").monthpicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), nextYear,
-		"Min/max - null, null - ctrl+pgdn");
+		"Min/max - null, null - pgdn");
 	inp.monthpicker("option", {minDate: minDate}).
-		monthpicker("hide").val("06/04/2008").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		monthpicker("hide").val("06/2008").monthpicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), minDate,
-		"Min/max - 02/29/2008, null - ctrl+pgup");
-	inp.val("06/04/2008").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		"Min/max - 02/2008, null - pgup");
+	inp.val("06/2008").monthpicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), nextYear,
-		"Min/max - 02/29/2008, null - ctrl+pgdn");
+		"Min/max - 02/2008, null - pgdn");
 	inp.monthpicker("option", {maxDate: maxDate}).
-		datepicker("hide").val("06/04/2008").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		datepicker("hide").val("06/2008").monthpicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), minDate,
-		"Min/max - 02/29/2008, 12/07/2008 - ctrl+pgup");
-	inp.val("06/04/2008").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		"Min/max - 02/2008, 12/2008 - pgup");
+	inp.val("06/2008").monthpicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), maxDate,
-		"Min/max - 02/29/2008, 12/07/2008 - ctrl+pgdn");
+		"Min/max - 02/2008, 12/2008 - pgdn");
 	inp.monthpicker("option", {minDate: null}).
-		datepicker("hide").val("06/04/2008").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		datepicker("hide").val("06/2008").monthpicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), lastYear,
-		"Min/max - null, 12/07/2008 - ctrl+pgup");
-	inp.val("06/04/2008").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		"Min/max - null, 12/2008 - pgup");
+	inp.val("06/2008").monthpicker("show");
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), maxDate,
-		"Min/max - null, 12/07/2008 - ctrl+pgdn");
-	// Relative dates
+		"Min/max - null, 12/2008 - pgdn");
+	
+  // Relative dates
 	date = new Date();
-	date.setDate(date.getDate() - 7);
-	inp.monthpicker("option", {minDate: "-1w", maxDate: "+1 M +10 D "}).
+  date.setDate(1);
+	date.setMonth(date.getMonth() - 1);
+	inp.monthpicker("option", {minDate: "-1 M", maxDate: "+3 M"}).
 		datepicker("hide").val("").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_UP}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date,
-		"Min/max - -1w, +1 M +10 D - ctrl+pgup");
-	date = TestHelpers.monthpicker.addMonths(new Date(), 1);
-	date.setDate(date.getDate() + 10);
+		"Min/max - -1 M, +3 M - pgup");
+
+	date.setMonth(new Date().getMonth() + 3);
 	inp.val("").monthpicker("show");
-	inp.simulate("keydown", {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date,
-		"Min/max - -1w, +1 M +10 D - ctrl+pgdn");
+		"Min/max - -1 M, +3 M - pgdn");
+
 	// With existing date
 	inp = TestHelpers.monthpicker.init("#inp");
-	inp.val("06/04/2008").monthpicker("option", {minDate: minDate});
-	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate > min");
-	inp.monthpicker("option", {minDate: null}).val("01/04/2008").monthpicker("option", {minDate: minDate});
+
+  console.log(inp.monthpicker("getDate"));
+	inp.val("06/2008").monthpicker("option", {minDate: minDate});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 6 - 1, 1), "Min/max - setDate > min");
+	inp.monthpicker("option", {minDate: null}).val("01/2008").monthpicker("option", {minDate: minDate});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), minDate, "Min/max - setDate < min");
-	inp.monthpicker("option", {minDate: null}).val("06/04/2008").monthpicker("option", {maxDate: maxDate});
-	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate < max");
-	inp.monthpicker("option", {maxDate: null}).val("01/04/2009").monthpicker("option", {maxDate: maxDate});
+	inp.monthpicker("option", {minDate: null}).val("06/2008").monthpicker("option", {maxDate: maxDate});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 6 - 1, 1), "Min/max - setDate < max");
+	inp.monthpicker("option", {maxDate: null}).val("01/2009").monthpicker("option", {maxDate: maxDate});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), maxDate, "Min/max - setDate > max");
-	inp.monthpicker("option", {maxDate: null}).val("01/04/2008").monthpicker("option", {minDate: minDate, maxDate: maxDate});
+	inp.monthpicker("option", {maxDate: null}).val("01/2008").monthpicker("option", {minDate: minDate, maxDate: maxDate});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), minDate, "Min/max - setDate < min");
-	inp.monthpicker("option", {maxDate: null}).val("06/04/2008").monthpicker("option", {minDate: minDate, maxDate: maxDate});
-	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 6 - 1, 4), "Min/max - setDate > min, < max");
-	inp.monthpicker("option", {maxDate: null}).val("01/04/2009").monthpicker("option", {minDate: minDate, maxDate: maxDate});
+	inp.monthpicker("option", {maxDate: null}).val("06/2008").monthpicker("option", {minDate: minDate, maxDate: maxDate});
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), new Date(2008, 6 - 1, 1), "Min/max - setDate > min, < max");
+	inp.monthpicker("option", {maxDate: null}).val("01/2009").monthpicker("option", {minDate: minDate, maxDate: maxDate});
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), maxDate, "Min/max - setDate > max");
 
-	inp.monthpicker("option", {yearRange: "-0:+1"}).val("01/01/" + new Date().getFullYear());
-	ok(dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - previous button disabled at 1/1/minYear");
-	inp.monthpicker("setDate", "12/30/" + new Date().getFullYear());
-	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled at 12/30/maxYear");
+	inp.monthpicker("option", {yearRange: "-0:+1"}).val("01/" + new Date().getFullYear());
+	ok(dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - previous button disabled at 1/minYear");
+	inp.monthpicker("setDate", "12/" + new Date().getFullYear());
+	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled at 12/maxYear");
 
 	inp.monthpicker("option", {
 		minDate: new Date(1900, 0, 1),
@@ -438,7 +443,7 @@ test("minMax", function() {
 
 	inp.monthpicker("option", {
 		minDate: new Date(1900, 0, 1),
-		maxDate: "1/25/2007",
+		maxDate: new Date(2007, 1 - 1, 25),
 		yearRange: "1900:2007"
 	}).val( "" );
 	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled");
@@ -446,18 +451,23 @@ test("minMax", function() {
 });
 
 test("setDate", function() {
-	expect( 24 );
+	expect( 18 );
 	var inl, alt, minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
 		inp = TestHelpers.monthpicker.init("#inp"),
-		date1 = new Date(2008, 6 - 1, 4),
+		date1 = new Date(2008, 6 - 1, 1),
 		date2 = new Date();
+  date2.setDate(1);
+
 	ok(inp.monthpicker("getDate") == null, "Set date - default");
 	inp.monthpicker("setDate", date1);
-	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date - 2008-06-04");
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date - 2008-06-01");
+
 	date1 = new Date();
-	date1.setDate(date1.getDate() + 7);
+  date1.setDate(1);
+  date1.setMonth(date1.getMonth() + 7);
 	inp.monthpicker("setDate", +7);
-	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date - +7");
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date (months) - +7");
+
 	date2.setFullYear(date2.getFullYear() + 2);
 	inp.monthpicker("setDate", "+2y");
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date2, "Set date - +2y");
@@ -465,48 +475,51 @@ test("setDate", function() {
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date - two dates");
 	inp.monthpicker("setDate");
 	ok(inp.monthpicker("getDate") == null, "Set date - null");
+
 	// Relative to current date
 	date1 = new Date();
-	date1.setDate(date1.getDate() + 7);
+	date1.setDate(1)
+  date1.setMonth(date1.getMonth() + 7);
 	inp.monthpicker("setDate", "c +7");
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date - c +7");
-	date1.setDate(date1.getDate() + 7);
+
+  date1.setMonth(date1.getMonth() + 7);
 	inp.monthpicker("setDate", "c+7");
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date - c+7");
-	date1.setDate(date1.getDate() - 21);
-	inp.monthpicker("setDate", "c -3 w");
-	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date - c -3 w");
+	date1.setMonth(date1.getMonth() - 3);
+	inp.monthpicker("setDate", "c -3 m");
+	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date1, "Set date - c -3 m");
 	// Inline
-	inl = TestHelpers.monthpicker.init("#inl");
-	date1 = new Date(2008, 6 - 1, 4);
-	date2 = new Date();
-	TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date2, "Set date inline - default");
-	inl.monthpicker("setDate", date1);
-	TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date1, "Set date inline - 2008-06-04");
-	date1 = new Date();
-	date1.setDate(date1.getDate() + 7);
-	inl.monthpicker("setDate", +7);
-	TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date1, "Set date inline - +7");
-	date2.setFullYear(date2.getFullYear() + 2);
-	inl.monthpicker("setDate", "+2y");
-	TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date2, "Set date inline - +2y");
-	inl.monthpicker("setDate", date1, date2);
-	TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date1, "Set date inline - two dates");
-	inl.monthpicker("setDate");
-	ok(inl.monthpicker("getDate") == null, "Set date inline - null");
+	//inl = TestHelpers.monthpicker.init("#inl");
+	//date1 = new Date(2008, 6 - 1, 4);
+	//date2 = new Date();
+	//TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date2, "Set date inline - default");
+	//inl.monthpicker("setDate", date1);
+	//TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date1, "Set date inline - 2008-06-04");
+	//date1 = new Date();
+	//date1.setDate(date1.getDate() + 7);
+	//inl.monthpicker("setDate", +7);
+	//TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date1, "Set date inline - +7");
+	//date2.setFullYear(date2.getFullYear() + 2);
+	//inl.monthpicker("setDate", "+2y");
+	//TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date2, "Set date inline - +2y");
+	//inl.monthpicker("setDate", date1, date2);
+	//TestHelpers.monthpicker.equalsDate(inl.monthpicker("getDate"), date1, "Set date inline - two dates");
+	//inl.monthpicker("setDate");
+	//ok(inl.monthpicker("getDate") == null, "Set date inline - null");
 	// Alternate field
 	alt = $("#alt");
-	inp.monthpicker("option", {altField: "#alt", altFormat: "yy-mm-dd"});
-	date1 = new Date(2008, 6 - 1, 4);
+	inp.monthpicker("option", {altField: "#alt", altFormat: "yy-mm"});
+	date1 = new Date(2008, 6 - 1, 1);
 	inp.monthpicker("setDate", date1);
-	equal(inp.val(), "06/04/2008", "Set date alternate - 06/04/2008");
-	equal(alt.val(), "2008-06-04", "Set date alternate - 2008-06-04");
+	equal(inp.val(), "06/2008", "Set date alternate - 06/2008");
+	equal(alt.val(), "2008-06", "Set date alternate - 2008-06");
 	// With minimum/maximum
 	inp = TestHelpers.monthpicker.init("#inp");
-	date1 = new Date(2008, 1 - 1, 4);
-	date2 = new Date(2008, 6 - 1, 4);
-	minDate = new Date(2008, 2 - 1, 29);
-	maxDate = new Date(2008, 3 - 1, 28);
+	date1 = new Date(2008, 1 - 1, 1);
+	date2 = new Date(2008, 6 - 1, 1);
+	minDate = new Date(2008, 2 - 1, 1);
+	maxDate = new Date(2008, 3 - 1, 1);
 	inp.val("").monthpicker("option", {minDate: minDate}).monthpicker("setDate", date2);
 	TestHelpers.monthpicker.equalsDate(inp.monthpicker("getDate"), date2, "Set date min/max - setDate > min");
 	inp.monthpicker("setDate", date1);
@@ -531,24 +544,24 @@ test("altField", function() {
 		alt = $("#alt");
 	// No alternate field set
 	alt.val("");
-	inp.val("06/04/2008").monthpicker("show");
+	inp.val("06/2008").monthpicker("show");
 	inp.simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	equal(inp.val(), "06/04/2008", "Alt field - dp - enter");
+	equal(inp.val(), "06/2008", "Alt field - dp - enter");
 	equal(alt.val(), "", "Alt field - alt not set");
 	// Alternate field set
 	alt.val("");
-	inp.monthpicker("option", {altField: "#alt", altFormat: "yy-mm-dd"}).
-		val("06/04/2008").monthpicker("show");
+	inp.monthpicker("option", {altField: "#alt", altFormat: "yy-mm"}).
+		val("06/2008").monthpicker("show");
 	inp.simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	equal(inp.val(), "06/04/2008", "Alt field - dp - enter");
-	equal(alt.val(), "2008-06-04", "Alt field - alt - enter");
+	equal(inp.val(), "06/2008", "Alt field - dp - enter");
+	equal(alt.val(), "2008-06", "Alt field - alt - enter");
 	// Move from initial date
 	alt.val("");
-	inp.val("06/04/2008").monthpicker("show");
+	inp.val("06/2008").monthpicker("show");
 	inp.simulate("keydown", {keyCode: $.ui.keyCode.PAGE_DOWN}).
 		simulate("keydown", {keyCode: $.ui.keyCode.ENTER});
-	equal(inp.val(), "07/04/2008", "Alt field - dp - pgdn");
-	equal(alt.val(), "2008-07-04", "Alt field - alt - pgdn");
+	equal(inp.val(), "06/2009", "Alt field - dp - pgdn");
+	equal(alt.val(), "2009-06", "Alt field - alt - pgdn");
 	// Alternate field set - closed
 	alt.val("");
 	inp.val("06/04/2008").monthpicker("show");

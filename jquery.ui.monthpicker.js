@@ -667,7 +667,9 @@
 		
 		/* Generate the HTML for the current state of the date picker. */
 		_generateHTML: function(inst) {
-      var printDate;
+      var printDate, hideIfNoPrevNext;
+
+			hideIfNoPrevNext = false;
 			var today = new Date();
 			today = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // clear time
 			var currentDate = (!inst.currentMonth ? new Date(9999, 9, 9) :
@@ -693,10 +695,15 @@
 				new Date(drawYear + stepYears, 1, 1),
 				this._getFormatConfig(inst)));
 
-      var prev = '<a class="ui-datepicker-prev ui-corner-all" data-event="click" data-handler="prev"' +
-        ' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-w">' + prevText + '</span></a>';
-      var next = '<a class="ui-datepicker-next ui-corner-all" data-event="click" data-handler="next"' +
-        ' title="' + nextText + '"><span class="ui-icon ui-icon-circle-triangle-e">' + nextText + '</span></a>';
+			var prev = (this._canAdjustYear(inst, -1, drawYear) ?
+				"<a class='ui-datepicker-prev ui-corner-all' data-handler='prev' data-event='click'" +
+				" title='" + prevText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "e" : "w") + "'>" + prevText + "</span></a>" :
+				(hideIfNoPrevNext ? "" : "<a class='ui-datepicker-prev ui-corner-all ui-state-disabled' title='"+ prevText +"'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "e" : "w") + "'>" + prevText + "</span></a>"));
+
+			var next = (this._canAdjustYear(inst, +1, drawYear) ?
+				"<a class='ui-datepicker-next ui-corner-all' data-handler='next' data-event='click'" +
+				" title='" + nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>" :
+				(hideIfNoPrevNext ? "" : "<a class='ui-datepicker-next ui-corner-all ui-state-disabled' title='"+ nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>"));
 
       html += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">' +
         prev + next + this._generateYearHeader(inst, drawYear) + // draw year header
@@ -889,6 +896,39 @@
 			var newDate = (minDate && date < minDate ? minDate : date);
 			newDate = (maxDate && newDate > maxDate ? maxDate : newDate);
 			return newDate;
+		},
+
+		/* Determines if we should allow a "next/prev" year display change. */
+		_canAdjustYear: function(inst, offset, curYear) {
+			var date = new Date(curYear + offset, 1, 1);
+			return this._isInRange(inst, date);
+		},
+
+		/* Is the given date in the accepted range? */
+		_isInRange: function(inst, date) {
+			var yearSplit, currentYear,
+				minDate = this._getMinMaxDate(inst, "min"),
+				maxDate = this._getMinMaxDate(inst, "max"),
+				minYear = null,
+				maxYear = null,
+				years = this._get(inst, "yearRange");
+				if (years){
+					yearSplit = years.split(":");
+					currentYear = new Date().getFullYear();
+					minYear = parseInt(yearSplit[0], 10);
+					maxYear = parseInt(yearSplit[1], 10);
+					if ( yearSplit[0].match(/[+\-].*/) ) {
+						minYear += currentYear;
+					}
+					if ( yearSplit[1].match(/[+\-].*/) ) {
+						maxYear += currentYear;
+					}
+				}
+
+			return ((!minDate || date.getTime() >= minDate.getTime()) &&
+				(!maxDate || date.getTime() <= maxDate.getTime()) &&
+				(!minYear || date.getFullYear() >= minYear) &&
+				(!maxYear || date.getFullYear() <= maxYear));
 		},
 		
 		/* Action for selecting a new month/year. */
@@ -1307,6 +1347,7 @@
           }
         }
         this._attachments($(target), inst);
+				this._setDate(inst, date);
         this._updateAlternate(inst);
         this._updateMonthpicker(inst);
       }
@@ -1317,9 +1358,12 @@
      * @param  target element - the target input field or division or span
      * @return Date - the current date
      */
-    _getDateMonthpicker: function(target) {
-      var inst = this._getInst(target);
-      return (inst ? this._getDate(inst) : null);
+    _getDateMonthpicker: function(target, noDefault) {
+			var inst = this._getInst(target);
+			if (inst && !inst.inline) {
+				this._setDateFromField(inst, noDefault);
+			}
+			return (inst ? this._getDate(inst) : null);
     },
 		
 		/* Format the given date for display. */
