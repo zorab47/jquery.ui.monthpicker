@@ -1,14 +1,10 @@
-# A Monthpicker for [jQuery UI][]
+# Monthpicker for [jQuery UI][]
 
 ![jquery.ui.monthpicker][jquery.ui.monthpicker-image]
 
 View a working [JSFiddle demo](http://jsfiddle.net/HXwBv/1/)!
 
-## Why?
-
-You might be using [jQuery UI Datepicker][] and are looking for a similar Monthpicker widget. Unfortunately, this is not part of the Datepicker widget. After some searching you will realize two things: you are not alone in wanting a Monthpicker, and most solutions rely on dirty hacks of the original jQuery UI Datepicker widget.
-
-Be relieved, you have now found a customizable Monthpicker implementation. Monthpicker is largely based on jQuery UI Datepicker. You will notice that the design is very similar to Datepicker, as it uses the same CSS. Hence it is fully compatible with your usual jQuery UI themes!
+Looking for simple Rails integration? Try the [jquery-monthpicker-rails](https://github.com/zorab47/jquery-monthpicker-rails) gem.
 
 ## Available settings
 
@@ -62,6 +58,13 @@ The format can be combinations of the following:
 - `!` - Windows ticks (100ns since 01/01/0001)
 - `'...'` - literal text
 - `''` - single quote
+
+## Why?
+
+You might be using [jQuery UI Datepicker][] and are looking for a similar Monthpicker widget. Unfortunately, this is not part of the Datepicker widget. After some searching you will realize two things: you are not alone in wanting a Monthpicker, and most solutions rely on dirty hacks of the original jQuery UI Datepicker widget.
+
+Be relieved, you have now found a customizable Monthpicker implementation. Monthpicker is largely based on jQuery UI Datepicker. You will notice that the design is very similar to Datepicker, as it uses the same CSS. Hence it is fully compatible with your usual jQuery UI themes!
+
 
 ## Alternative Monthpickers
 
