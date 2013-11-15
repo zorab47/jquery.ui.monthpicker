@@ -43,7 +43,7 @@
 		this._mainDivId = 'ui-monthpicker-div'; // The ID of the main monthpicker division
 		this._triggerClass = 'ui-monthpicker-trigger'; // The name of the trigger marker class
 		this._dialogClass = 'ui-monthpicker-dialog'; // The name of the dialog marker class
-    this._currentClass = "ui-datepicker-current-day"; // The name of the current day marker class
+    this._currentClass = "ui-datepicker-today"; // The name of the current day marker class
     this._dayOverClass = "ui-datepicker-days-cell-over"; // The name of the day hover marker class
 		this._unselectableClass = "ui-datepicker-unselectable"; // The name of the unselectable cell marker class
 		this.regional = []; // Available regional settings, indexed by language code
@@ -199,6 +199,7 @@
 
 		/* Make attachments based on settings. */
 		_attachments: function(input, inst) {
+			var buttonText, buttonImage;
 			var appendText = this._get(inst, "appendText"),
         isRTL = this._get(inst, "isRTL");
 
@@ -909,8 +910,8 @@
 
 		/* Determines if we should allow a "next/prev" year display change. */
 		_canAdjustYear: function(inst, offset, curYear) {
-			var firstMonth = new Date(curYear + offset, 1, 1);
-			var lastMonth = new Date(curYear + offset, 12 - 1, 1);
+			var firstMonth = new Date(curYear + offset,  0, 1);
+			var lastMonth  = new Date(curYear + offset, 11, 1);
 			return this._isInRange(inst, firstMonth) || this._isInRange(inst, lastMonth);
 		},
 
