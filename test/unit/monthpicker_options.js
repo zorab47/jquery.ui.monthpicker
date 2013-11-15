@@ -339,7 +339,7 @@ test("miscellaneous", function() {
 });
 
 test("minMax", function() {
-	expect( 23 );
+	expect( 24 );
 	var date,
 		inp = TestHelpers.monthpicker.init("#inp"),
 		dp = $("#ui-monthpicker-div"),
@@ -448,6 +448,12 @@ test("minMax", function() {
 	}).val( "" );
 	ok(dp.find(".ui-datepicker-next").hasClass("ui-state-disabled"), "Year Range Test - next button disabled");
 	ok(!dp.find(".ui-datepicker-prev").hasClass("ui-state-disabled"), "Year Range Test - prev button enabled");
+
+	inp.monthpicker("option", {
+		minDate: new Date(2008,  3 - 1, 1),
+		maxDate: new Date(2008, 10 - 1, 1)
+	}).val("06/2008");
+	equal(dp.find(".ui-datepicker-unselectable").size(), 4, "Marks unselectable months with .ui-datepicker-unselectable");
 });
 
 test("setDate", function() {

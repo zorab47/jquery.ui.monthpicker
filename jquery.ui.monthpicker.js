@@ -45,6 +45,7 @@
 		this._dialogClass = 'ui-monthpicker-dialog'; // The name of the dialog marker class
     this._currentClass = "ui-datepicker-current-day"; // The name of the current day marker class
     this._dayOverClass = "ui-datepicker-days-cell-over"; // The name of the day hover marker class
+		this._unselectableClass = "ui-datepicker-unselectable"; // The name of the unselectable cell marker class
 		this.regional = []; // Available regional settings, indexed by language code
 		this.regional[''] = { // Default regional settings
       closeText: "Done", // Display text for close link
@@ -667,13 +668,15 @@
 		
 		/* Generate the HTML for the current state of the date picker. */
 		_generateHTML: function(inst) {
-      var printDate, hideIfNoPrevNext;
+      var printDate, hideIfNoPrevNext, unselectable;
 
 			hideIfNoPrevNext = false;
 			var today = new Date();
 			today = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // clear time
 			var currentDate = (!inst.currentMonth ? new Date(9999, 9, 9) :
 				new Date(inst.currentYear, inst.currentMonth, 1));
+			var minDate = this._getMinMaxDate(inst, "min");
+			var maxDate = this._getMinMaxDate(inst, "max");
 			var html = '';
 			var year = currentDate && currentDate.year ? currentDate.year : 2011;
 			var prevText = this._get(inst, 'prevText');
@@ -716,10 +719,12 @@
 				}
 
         printDate = new Date(drawYear, month, 1);
+				unselectable = (minDate && printDate < minDate) || (maxDate && printDate > maxDate);
 				var selectedDate = new Date(drawYear, inst.selectedMonth, 1);
 
 				html += '<td class="'
 					+ (drawYear == inst.currentYear && month == inst.currentMonth ? " " + this._currentClass : "") // highlight selected month
+					+ (unselectable ? " " + this._unselectableClass + " ui-state-disabled": "")  // highlight unselectable months
           + ((month === inst.selectedMonth && drawYear === inst.selectedYear && inst._keyEvent) || // user pressed key
 							(defaultDate.getTime() === printDate.getTime() && defaultDate.getTime() === selectedDate.getTime()) ?
 							// or defaultDate is current printedDate and defaultDate is selectedDate
@@ -900,8 +905,9 @@
 
 		/* Determines if we should allow a "next/prev" year display change. */
 		_canAdjustYear: function(inst, offset, curYear) {
-			var date = new Date(curYear + offset, 1, 1);
-			return this._isInRange(inst, date);
+			var firstMonth = new Date(curYear + offset, 1, 1);
+			var lastMonth = new Date(curYear + offset, 12 - 1, 1);
+			return this._isInRange(inst, firstMonth) || this._isInRange(inst, lastMonth);
 		},
 
 		/* Is the given date in the accepted range? */
