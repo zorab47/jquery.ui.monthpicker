@@ -2,7 +2,7 @@
 
 ![jquery.ui.monthpicker][jquery.ui.monthpicker-image]
 
-View a working [JSFiddle demo](http://jsfiddle.net/HXwBv/1/)!
+View a working [JSFiddle demo](http://jsfiddle.net/eHLAw/3/)!
 
 Looking for simple Rails integration? Try the [jquery-monthpicker-rails](https://github.com/zorab47/jquery-monthpicker-rails) gem.
 
