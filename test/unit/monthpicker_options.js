@@ -339,7 +339,7 @@ test("miscellaneous", function() {
 });
 
 test("minMax", function() {
-	expect( 24 );
+	expect( 25 );
 	var date,
 		inp = TestHelpers.monthpicker.init("#inp"),
 		dp = $("#ui-monthpicker-div"),
@@ -454,6 +454,14 @@ test("minMax", function() {
 		maxDate: new Date(2008, 10 - 1, 1)
 	}).val("06/2008");
 	equal(dp.find(".ui-datepicker-unselectable").size(), 4, "Marks unselectable months with .ui-datepicker-unselectable");
+
+	inp.monthpicker("option", {
+    yearRange: "2006:2010",
+    changeYear: true,
+		minDate: new Date(2008,  3 - 1, 1),
+		maxDate: new Date(2008, 10 - 1, 1)
+	}).val("06/2008");
+	equal(dp.find(".ui-datepicker-year option").size(), 1, "Limits year options by minDate/maxDate");
 });
 
 test("setDate", function() {

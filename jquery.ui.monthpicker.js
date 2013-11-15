@@ -709,7 +709,7 @@
 				(hideIfNoPrevNext ? "" : "<a class='ui-datepicker-next ui-corner-all ui-state-disabled' title='"+ nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>"));
 
       html += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">' +
-        prev + next + this._generateYearHeader(inst, drawYear) + // draw year header
+        prev + next + this._generateYearHeader(inst, drawYear, minDate, maxDate) + // draw year header
         '</div><table class="ui-datepicker-calendar"><tbody>';
 			
 			// draw months table
@@ -759,7 +759,8 @@
 		},
 			
 		/* Generate the year header. */
-		_generateYearHeader: function(inst, drawYear) {
+		_generateYearHeader: function(inst, drawYear, minDate, maxDate) {
+			var inMinYear, inMaxYear;
 			var changeYear = this._get(inst, 'changeYear');
 			var html = '<div class="ui-datepicker-title">';
 			// year selection
@@ -778,6 +779,9 @@
 					};
 					var year = determineYear(years[0]);
 					var endYear = Math.max(year, determineYear(years[1] || ''));
+
+					year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
+					endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
 					
 					inst.yearshtml += '<select class="ui-datepicker-year" ' +
             "data-handler='selectYear' data-event='change'>";
