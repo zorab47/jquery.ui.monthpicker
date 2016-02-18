@@ -183,7 +183,6 @@
 				return;
 			this._attachments(input, inst);
 			input.addClass(this.markerClassName).keydown(this._doKeyDown).
-				keypress(this._doKeyPress).keyup(this._doKeyUp).
 				bind("setData.monthpicker", function(event, key, value) {
 					inst.settings[key] = value;
 				}).bind("getData.monthpicker", function(event, key) {
@@ -620,9 +619,7 @@
 				inst.trigger.remove();
 				$target.removeClass(this.markerClassName).
 					unbind("focus", this._showMonthpicker).
-					unbind("keydown", this._doKeyDown).
-					unbind("keypress", this._doKeyPress).
-					unbind("keyup", this._doKeyUp);
+					unbind("keydown", this._doKeyDown)
 			} else if (nodeName === "div" || nodeName === "span") {
 				$target.removeClass(this.markerClassName).empty();
 			}
