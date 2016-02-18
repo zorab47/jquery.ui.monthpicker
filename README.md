@@ -6,6 +6,10 @@ View a working [JSFiddle demo](http://jsfiddle.net/eHLAw/3/)!
 
 Looking for simple Rails integration? Try the [jquery-monthpicker-rails](https://github.com/zorab47/jquery-monthpicker-rails) gem.
 
+## jQuery Support
+
+jQuery 1.9+ and 2.X are supported.
+
 ## Available settings
 
 Settings show their current defaults.
