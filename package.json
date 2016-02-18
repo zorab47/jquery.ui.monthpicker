@@ -1,0 +1,27 @@
+{
+  "name": "jquery-ui-monthpicker",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": ">= 1.9.0",
+    "jquery-ui": ">= 1.10.0"
+  },
+  "description": "A jQuery UI compatible Monthpicker widget. Monthpicker is largely based on jQuery UI Datepicker and uses the same CSS. Making it it is fully compatible with all jQuery UI themes and translations!",
+  "main": "jquery.ui.monthpicker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ddiebel/monthpicker.gi://github.com/zorab47/jquery.ui.monthpicker"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "author": "Charles Maresh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zorab47/jquery.ui.monthpicker/issues"
+  },
+  "homepage": "https://github.com/zorab47/jquery.ui.monthpicker"
+}
