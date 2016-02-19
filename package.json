@@ -5,8 +5,11 @@
     "jquery": ">= 1.9.0",
     "jquery-ui": ">= 1.10.0"
   },
-  "description": "A jQuery UI compatible Monthpicker widget. Monthpicker is largely based on jQuery UI Datepicker and uses the same CSS. Making it it is fully compatible with all jQuery UI themes and translations!",
+  "description": "A jQuery UI compatible Monthpicker widget. Monthpicker is largely based on jQuery UI Datepicker and uses the same CSS. Making it fully compatible with all jQuery UI themes and translations!",
   "main": "jquery.ui.monthpicker.js",
+  "contributors": [{
+    "name": "Julien Poumailloux"
+  }],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
