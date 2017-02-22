@@ -1,6 +1,6 @@
 {
   "name": "jquery-ui-monthpicker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "jquery": ">= 1.9.0",
     "jquery-ui": ">= 1.10.0"
