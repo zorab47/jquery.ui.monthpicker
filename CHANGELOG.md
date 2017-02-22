@@ -5,11 +5,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [1.0.2] - 2017-02-21
 
-### Fixed
-- Update versioning to match npm registry
-
-## [1.0.1] - 2017-02-21
-
 ### Added
 - Initial change log
 
@@ -17,3 +12,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - Compatibility with jQuery UI 1.12 due to its removal of `zIndex()`. See
   jQuery UI [1.12 Upgrade Guide](https://jqueryui.com/upgrade-guide/1.12/#removed-zindex)
   for more information.
+
+[1.0.2]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.1...v1.0.2
