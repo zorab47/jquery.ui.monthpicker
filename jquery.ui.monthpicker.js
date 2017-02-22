@@ -319,7 +319,7 @@
 						width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()});
 				}
 			};
-			inst.dpDiv.zIndex($(input).zIndex()+1);
+			$.monthpicker._zIndex(inst.dpDiv, $.monthpicker._zIndex(input)+1);
 			$.monthpicker._monthpickerShowing = true;
 
 			if ($.effects && $.effects[showAnim])
@@ -331,6 +331,41 @@
 			if (inst.input.is(':visible') && !inst.input.is(':disabled'))
 				inst.input.focus();
 			$.monthpicker._curInst = inst;
+		},
+
+		_zIndex: function(el, zIndex) {
+			var $el = $(el);
+
+			if (zIndex !== undefined) {
+				return $el.css('zIndex', zIndex);
+			}
+
+			if ($el.length) {
+				var elem = $($el[0]), position, value;
+				while (elem.length && elem[0] !== document) {
+
+					// Ignore z-index if position is set to a value where z-index is ignored by the browser
+					// This makes behavior of this function consistent across browsers
+					// WebKit always returns auto if the element is positioned
+					position = elem.css('position');
+
+					if (position === 'absolute' || position === 'relative' || position === 'fixed') {
+
+						// IE returns 0 when zIndex is not specified
+						// other browsers return a string
+						// we ignore the case of nested elements with an explicit value of 0
+						// <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+						value = parseInt(elem.css('zIndex'), 10);
+						if (!isNaN(value) && value !== 0) {
+							return value;
+						}
+					}
+
+					elem = elem.parent();
+				}
+			}
+
+			return 0;
 		},
 
 		/* Generate the date picker content. */
