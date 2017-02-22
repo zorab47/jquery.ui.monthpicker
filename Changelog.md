@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [1.0.2] - 2017-02-21
+
+### Fixed
+- Update versioning to match npm registry
+
 ## [1.0.1] - 2017-02-21
 
 ### Added
