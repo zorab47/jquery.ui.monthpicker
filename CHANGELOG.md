@@ -13,4 +13,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   jQuery UI [1.12 Upgrade Guide](https://jqueryui.com/upgrade-guide/1.12/#removed-zindex)
   for more information.
 
-[1.0.2]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.1...v1.0.2
+[1.0.2]: https://github.com/zorab47/jquery.ui.monthpicker/compare/v1.0.1...v1.0.2
