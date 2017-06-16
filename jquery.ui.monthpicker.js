@@ -322,7 +322,7 @@
 			$.monthpicker._zIndex(inst.dpDiv, $.monthpicker._zIndex(input)+1);
 			$.monthpicker._monthpickerShowing = true;
 
-			if ($.effects && $.effects[showAnim])
+			if ($.effects && $.effects.effect[showAnim])
 				inst.dpDiv.show(showAnim, $.monthpicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
@@ -423,7 +423,7 @@
 					$.monthpicker._curInst = null;
 				};
 
-				if ( $.effects && $.effects[ showAnim ] )
+				if ( $.effects && $.effects.effect[ showAnim ] )
 					inst.dpDiv.hide(showAnim, $.monthpicker._get(inst, 'showOptions'), duration, postProcess);
 				else
 					inst.dpDiv[(showAnim == 'slideDown' ? 'slideUp' :
